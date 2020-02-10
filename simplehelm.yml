@@ -1,4 +1,4 @@
-        
+ resources:
   - name: simplehelmChart
     type: HelmChart
     configuration:
@@ -10,16 +10,16 @@
   - name: simplehelmRepo_chart
     type: GitRepo
     configuration:
-      gitProvider: john_bbs
-      path: ~johns/simplehelm
+      gitProvider: twgithub
+      path: jfrogtw/jfrog-pipelines-simplehelm
       files:
         include: "simplehelm.*"
 
   - name: simplehelmRepo_docker
     type: GitRepo
     configuration:
-      gitProvider: john_bbs
-      path: ~johns/simplehelm
+      gitProvider: twgithub
+      path: jfrogtw/jfrog-pipelines-simplehelm
       files:
         include: "Dockerfile|server.js|package.json"
 
@@ -27,7 +27,6 @@
     type: Image
     configuration:
       registry: tr_docker
-
       imageName: trriplejay/simplehelm
       imageTag: latest
 
