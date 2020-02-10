@@ -1,0 +1,121 @@
+        
+  - name: simplehelmChart
+    type: HelmChart
+    configuration:
+      sourceArtifactory: art
+      repository: simplecharts
+      chart: simplehelm
+      version: 0.0.0
+
+  - name: simplehelmRepo_chart
+    type: GitRepo
+    configuration:
+      gitProvider: john_bbs
+      path: ~johns/simplehelm
+      files:
+        include: "simplehelm.*"
+
+  - name: simplehelmRepo_docker
+    type: GitRepo
+    configuration:
+      gitProvider: john_bbs
+      path: ~johns/simplehelm
+      files:
+        include: "Dockerfile|server.js|package.json"
+
+  - name: simplehelmDockerImage
+    type: Image
+    configuration:
+      registry: tr_docker
+
+      imageName: trriplejay/simplehelm
+      imageTag: latest
+
+pipelines:
+  - name: helm_full_flow
+    steps:
+#      - name: dockerBuildPush
+#        type: Bash
+#        configuration:
+#          integrations:
+#            - name: tr_docker
+#          inputResources:
+#            - name: simplehelmRepo_docker
+#          outputResources:
+#            - name: simplehelmDockerImage
+#        execution:
+#          onStart:
+#            - find / -iname HelmPublish
+#            - apt-get install -y tree
+#            - tree /jfrog
+#            - pushd /tmp
+#            - wget https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz
+#            - tar -zxvf helm-v2.14.3-linux-amd64.tar.gz
+#            - mv linux-amd64/helm /usr/local/bin/helm
+#            - popd
+#            - helm version
+#          onExecute:
+#            - pushd $res_simplehelmRepo_docker_resourcePath
+#            - docker build -t trriplejay/simplehelm:$run_number .
+#            - docker push trriplejay/simplehelm:$run_number
+
+
+       - name: build
+         type: DockerBuild
+         configuration:
+           affinityGroup: buildAndPush
+           integrations:
+             - name: tr_docker
+           inputResources:
+             - name: simplehelmRepo_docker
+           dockerFileLocation: .
+           dockerFileName: Dockerfile
+           dockerImageName: trriplejay/simplehelm
+           dockerImageTag: $run_number
+
+       - name: push
+         type: DockerPush
+         configuration:
+           affinityGroup: buildAndPush
+           integrations:
+             - name: tr_docker
+           targetRepository: trriplejay/simplehelm
+           inputSteps:
+             - name: build
+           outputResources:
+             - name: simplehelmDockerImage
+
+
+      - name: publish_helm_chart
+        type: HelmPublish
+        configuration:
+          inputResources:
+            - name: simplehelmRepo_chart
+          outputResources:
+            - name: simplehelmChart
+          chartPath: ./simplehelm
+        execution:
+          onStart:
+            - pushd /tmp
+            - wget https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz
+            - tar -zxvf helm-v2.14.3-linux-amd64.tar.gz
+            - mv linux-amd64/helm /usr/local/bin/helm
+            - popd
+
+      - name: deploy_helm_chart
+        type: HelmDeploy
+        configuration:
+          integrations:
+            - name: tr_kubernetes
+          inputResources:
+            - name: simplehelmChart
+            - name: simplehelmDockerImage
+          releaseName: simplehelm
+        execution:
+          onStart:
+            - pushd /tmp
+            - wget https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz
+            - tar -zxvf helm-v2.14.3-linux-amd64.tar.gz
+            - mv linux-amd64/helm /usr/local/bin/helm
+            - popd
+
