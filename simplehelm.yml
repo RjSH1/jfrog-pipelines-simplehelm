@@ -1,4 +1,4 @@
- resources:
+resources:
   - name: simplehelmChart
     type: HelmChart
     configuration:
