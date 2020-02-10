@@ -58,7 +58,6 @@ pipelines:
            outputResources:
              - name: simplehelmDockerImage
 
-
       - name: publish_helm_chart
         type: HelmPublish
         configuration:
