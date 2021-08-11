@@ -12,16 +12,16 @@ resources:
     configuration:
       gitProvider: myGithub
       path: RjSH1/jfrog-pipelines-simplehelm
-      files:
-        include: "simplehelm.*"
+      #files:
+      #  include: "simplehelm.*"
 
   - name: simplehelmRepo_docker
     type: GitRepo
     configuration:
       gitProvider: myGithub
       path: RjSH1/jfrog-pipelines-simplehelm
-      files:
-        include: "Dockerfile|server.js|package.json"
+      #files:
+      #  include: "Dockerfile|server.js|package.json"
 
   - name: simplehelmDockerImage
     type: Image
