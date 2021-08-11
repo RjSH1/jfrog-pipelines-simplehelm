@@ -1,8 +1,11 @@
+template: true   # required for local templates
+valuesFilePath: ./values.yml
+
 resources:
   - name: simplehelmChart
     type: HelmChart
     configuration:
-      sourceArtifactory: myArtifactory
+      sourceArtifactory: {{ .Values.artifactoryIntegration }}
       repository: simplecharts
       chart: simplehelm
       version: 0.0.0
@@ -10,16 +13,16 @@ resources:
   - name: simplehelmRepo_chart
     type: GitRepo
     configuration:
-      gitProvider: myGithub
-      path: RjSH1/jfrog-pipelines-simplehelm
+      gitProvider: {{ .Values.gitIntegration }}                      
+      path: {{ .Values.gitRepositoryPath }}  
       #files:
       #  include: "simplehelm.*"
 
   - name: simplehelmRepo_docker
     type: GitRepo
     configuration:
-      gitProvider: myGithub
-      path: RjSH1/jfrog-pipelines-simplehelm
+      gitProvider: {{ .Values.gitIntegration }}                      
+      path: {{ .Values.gitRepositoryPath }} 
       #files:
       #  include: "Dockerfile|server.js|package.json"
 
@@ -38,12 +41,12 @@ pipelines:
          configuration:
            affinityGroup: buildAndPush
            integrations:
-             - name: myDocker
+             - name: {{ .Values.artifactoryIntegration }} 
            inputResources:
              - name: simplehelmRepo_docker
            dockerFileLocation: .
            dockerFileName: Dockerfile
-           dockerImageName: icarausaug112021.jfrogdev.org/simplehelm
+           dockerImageName: {{ .Values.artifactoryUrl }}/{{ .Values.sourceRepository }}/{{ .Values.imageName }}
            dockerImageTag: $run_number
 
        - name: push
@@ -51,8 +54,8 @@ pipelines:
          configuration:
            affinityGroup: buildAndPush
            integrations:
-             - name: myArtifactory
-           targetRepository: icarausaug112021.jfrogdev.org/simplehelm
+             - name: {{ .Values.artifactoryIntegration }} 
+           targetRepository: {{ .Values.sourceRepository }}
            inputSteps:
              - name: build
            outputResources:
