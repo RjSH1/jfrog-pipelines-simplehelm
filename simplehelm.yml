@@ -38,7 +38,7 @@ pipelines:
          configuration:
            affinityGroup: buildAndPush
            integrations:
-             - name: tr_docker
+             - name: myDocker
            inputResources:
              - name: simplehelmRepo_docker
            dockerFileLocation: .
@@ -51,7 +51,7 @@ pipelines:
          configuration:
            affinityGroup: buildAndPush
            integrations:
-             - name: tr_docker
+             - name: myDocker
            targetRepository: trriplejay/simplehelm
            inputSteps:
              - name: build
@@ -78,7 +78,7 @@ pipelines:
          type: HelmDeploy
          configuration:
            integrations:
-             - name: tr_kubernetes
+             - name: myKubernetes
            inputResources:
              - name: simplehelmChart
              - name: simplehelmDockerImage
