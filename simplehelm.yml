@@ -68,7 +68,7 @@ pipelines:
              - name: simplehelmRepo_chart
            outputResources:
              - name: simplehelmChart
-           chartPath: ./simplehelm
+           chartPath: ./chart
          execution:
            onStart:
             - pushd /tmp
