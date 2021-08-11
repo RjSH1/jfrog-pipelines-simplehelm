@@ -27,7 +27,7 @@ resources:
     type: Image
     configuration:
       registry: myDocker
-      imageName: https://icarausaug112021.jfrogdev.org/simplehelm
+      imageName: icarausaug112021.jfrogdev.org/simplehelm
       imageTag: latest
 
 pipelines:
@@ -43,7 +43,7 @@ pipelines:
              - name: simplehelmRepo_docker
            dockerFileLocation: .
            dockerFileName: Dockerfile
-           dockerImageName: https://icarausaug112021.jfrogdev.org/simplehelm
+           dockerImageName: icarausaug112021.jfrogdev.org/simplehelm
            dockerImageTag: $run_number
 
        - name: push
@@ -52,7 +52,7 @@ pipelines:
            affinityGroup: buildAndPush
            integrations:
              - name: myArtifactory
-           targetRepository: https://icarausaug112021.jfrogdev.org/simplehelm
+           targetRepository: icarausaug112021.jfrogdev.org/simplehelm
            inputSteps:
              - name: build
            outputResources:
