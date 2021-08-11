@@ -2,7 +2,7 @@ resources:
   - name: simplehelmChart
     type: HelmChart
     configuration:
-      sourceArtifactory: art
+      sourceArtifactory: myArtifactory
       repository: simplecharts
       chart: simplehelm
       version: 0.0.0
@@ -10,23 +10,23 @@ resources:
   - name: simplehelmRepo_chart
     type: GitRepo
     configuration:
-      gitProvider: twgithub
-      path: jfrogtw/jfrog-pipelines-simplehelm
+      gitProvider: myGithub
+      path: RjSH1/jfrog-pipelines-simplehelm
       files:
         include: "simplehelm.*"
 
   - name: simplehelmRepo_docker
     type: GitRepo
     configuration:
-      gitProvider: twgithub
-      path: jfrogtw/jfrog-pipelines-simplehelm
+      gitProvider: myGithub
+      path: RjSH1/jfrog-pipelines-simplehelm
       files:
         include: "Dockerfile|server.js|package.json"
 
   - name: simplehelmDockerImage
     type: Image
     configuration:
-      registry: tr_docker
+      registry: myDocker
       imageName: trriplejay/simplehelm
       imageTag: latest
 
@@ -90,4 +90,3 @@ pipelines:
             - tar -zxvf helm-v2.14.3-linux-amd64.tar.gz
             - mv linux-amd64/helm /usr/local/bin/helm
             - popd
-
