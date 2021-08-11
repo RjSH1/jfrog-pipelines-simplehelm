@@ -30,7 +30,7 @@ resources:
     type: Image
     configuration:
       registry: myDocker
-      imageName: icarausaug112021.jfrogdev.org/simplehelm
+      imageName:  {{ .Values.artifactoryUrl }}/{{ .Values.sourceRepository }}/{{ .Values.imageName }}
       imageTag: latest
 
 pipelines:
