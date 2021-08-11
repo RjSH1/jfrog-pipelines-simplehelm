@@ -51,7 +51,7 @@ pipelines:
          configuration:
            affinityGroup: buildAndPush
            integrations:
-             - name: myDocker
+             - name: myArtifactory
            targetRepository: trriplejay/simplehelm
            inputSteps:
              - name: build
